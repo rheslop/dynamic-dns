@@ -1,0 +1,89 @@
+---
+- hosts: "{{ target_host }}"
+  user: root
+
+  vars_prompt:
+  - name: "target_host"
+    prompt: "Specify target host"
+    private: no
+
+  vars_files:
+  - vars/dhcp-vars.yml
+  - vars/dns-vars.yml
+
+  tasks:
+
+  - name: Installing software (please wait)
+    yum:
+      state: present
+      name: "{{ item }}"
+    with_items:
+      - dhcp
+      - bind
+      - firewalld
+      - git
+
+  - name: Copy DHCP template
+    template:
+      src: templates/dhcpd.conf.j2
+      dest: /etc/dhcp/dhcpd.conf
+
+  - name: Copy DNS template
+    template:
+      src: templates/named.conf.j2
+      dest: /etc/named.conf
+      owner: named
+      group: named
+
+  - name: Copy zone file
+    template:
+      src: templates/zones/genericzone.local
+      dest: /var/named/dynamic/{{ domain }}.{{ top_level_domain }}
+      owner: named
+      group: named
+
+  - name: Set routing
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      state: present
+      reload: yes
+
+  - name: Copy reverse zone file
+    template:
+      src: templates/zones/genericreverse.local
+      dest: /var/named/dynamic/{{ reverse }}
+      owner: named
+      group: named
+
+  - name: Copy dhclient.conf
+    template:
+      src: templates/dhclient.conf.j2
+      dest: /var/dhcp/dhclient.conf
+
+  - name: Configure rndc key
+    script: scripts/ddns_rndc.sh 
+
+  - name: Start services
+    service:
+      name: "{{ item }}"
+      state: running
+      enabled: true
+    with_items:
+      - dhcpd
+      - named
+      - firewalld
+
+  - name: Open Firewall ports
+    firewalld:
+      permanent: true
+      immediate: true
+      state: enabled
+      zone: internal
+      service: "{{ item }}"
+    with_items:
+      - dns
+      - dhcp
+
+  - name: Bind interfaces to appropriate zones
+    script: scripts/firewalld_masquerade.sh

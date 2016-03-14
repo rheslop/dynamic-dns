@@ -1,0 +1,11 @@
+$TTL 3H
+@	IN SOA	@ {{ target_host }}.{{ domain }}.{{ top_level_domain }}. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+	IN	NS	{{ target_host }}.{{ domain }}.{{ top_level_domain }}.
+{{ target_host }}	IN	A	{{ listen_on }}
+

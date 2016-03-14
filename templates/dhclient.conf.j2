@@ -1,0 +1,5 @@
+timeout 300;
+retry 60;
+interface "{{ public_interface }}" {
+	prepend domain-name-servers {{ listen_on }};
+} 
