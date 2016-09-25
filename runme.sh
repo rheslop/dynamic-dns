@@ -14,7 +14,7 @@ echo "Subnet will be 192.168.x.0/24"
 echo ""
 read -p "x = " OCTET3
 echo ""
-echo "Enter a domain; for example,  example.com"
+echo "Enter a domain; for example, example.com"
 read -p "Domain: " DOMAIN
 
 DOMAIN_NAME=$(echo $DOMAIN | awk -F. '{print $1}')

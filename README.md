@@ -11,8 +11,10 @@ The required target host should have:
 
 	- Two interfaces, public and private.
 	- Public interface should be on a NATing network.
-	- eth0 facing public interface, eth1 facing private network
-	- Name or IP entered in ansible hosts file.
+	- If NATing network IP is not 192.168.124.1,
+	  then the runme.sh script must be updated for accuracy.
+	- eth0 facing public interface, eth1 facing private network.
+	- Name or IP of target host entered in ansible hosts file.
 	  For example:
 
 	router-net1 ansible_host=192.168.124.78
