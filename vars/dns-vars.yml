@@ -1,10 +1,9 @@
----
 #DNS
 public_interface: eth0
-listen_on: 192.168.150.2
+listen_on: 192.168.111.2
 last_octet: 2
-allow_query: 192.168.150.0/24
+allow_query: 192.168.111.0/24
 forwarder_1: 192.168.124.1
-domain: rfedbeta
+domain: vmnet
 top_level_domain: local
-reverse: 150.168.192.in-addr.arpa
+reverse: 111.168.192.in-addr.arpa

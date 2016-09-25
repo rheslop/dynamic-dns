@@ -1,13 +1,12 @@
 ---
 # DHCP
-subnet: 192.168.101.0
+subnet: 192.168.111.0
 netmask: 255.255.255.0
-range_start: 192.168.101.128
-range_end: 192.168.101.254
-router: 192.168.101.2
-domain_name_servers: 192.168.101.2
+range_start: 192.168.111.128
+range_end: 192.168.111.254
+router: 192.168.111.2
+domain_name_servers: 192.168.111.2
 domain_search: vmnet.local
 time_offset: -21600
 default_lease_time: 600
 max_lease_time: 7200
-
