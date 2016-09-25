@@ -23,6 +23,13 @@
       - firewalld
       - git
 
+  - name: Copy eth1 interface template
+    template:
+      src: templates/ifcfg-eth1    
+      dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+
+  - command: '/sbin/ifup eth1'
+
   - name: Copy DHCP template
     template:
       src: templates/dhcpd.conf.j2
@@ -59,7 +66,7 @@
   - name: Copy dhclient.conf
     template:
       src: templates/dhclient.conf.j2
-      dest: /var/dhcp/dhclient.conf
+      dest: /etc/dhcp/dhclient.conf
 
   - name: Configure rndc key
     script: scripts/ddns_rndc.sh 

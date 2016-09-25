@@ -1,0 +1,7 @@
+DEVICE=eth1
+NAME=eth1
+BOOTPROTO=none
+IPADDR={{ router }}
+NETMASK={{ netmask }}
+ONBOOT=yes
+ZONE=internal
