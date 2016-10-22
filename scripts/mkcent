@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ -z $1 ]; then 
+	echo "Please provide the VMs name.  Example:"
+	echo "$0 cent-1"
+	exit
+fi
+
+VM_NAME=$1
+FILENAME=${VM_NAME}.qcow2
+DOMAIN=workstation.local
+
+# Use template stored in /var/lib/libvirt/images/templates/
+TEMPLATE=/var/lib/libvirt/images/templates/CentOS-7-x86_64-template.qcow2
+
+# Create image in /var/lib/libvirt/images/
+IMAGES_PATH=/var/lib/libvirt/images
+
+if [ -e $IMAGES_PATH/$FILENAME ]; then
+	echo "$FILENAME already exists in $IMAGES_PATH"
+	echo "Please choose another name"
+	exit
+fi
+
+/usr/bin/qemu-img create -f qcow2 -b $TEMPLATE $IMAGES_PATH/$FILENAME
+
+# Set hostname
+virt-customize -a $IMAGES_PATH/$FILENAME --hostname $1.$DOMAIN
+
+# Create the virtual machine
+/usr/bin/virt-install \
+--disk path=/var/lib/libvirt/images/$FILENAME \
+--network network=net0 \
+--name $VM_NAME \
+--ram 1024 \
+--import \
+--os-type=linux \
+--os-variant=rhel7
